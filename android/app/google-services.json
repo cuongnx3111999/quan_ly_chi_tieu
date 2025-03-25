@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "254603231116",
+    "project_id": "careful-engine-447006-v6",
+    "storage_bucket": "careful-engine-447006-v6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254603231116:android:fd8444e76cc1ac789aa0a9",
+        "android_client_info": {
+          "package_name": "com.example.quan_ly_chi_tieu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBl6yE3C25XCjn2cPUNSqoRsc0vFzy-I1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
