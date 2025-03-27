@@ -100,7 +100,10 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: Text(
                 _firebaseStatus,
-                style: TextStyle(color: _statusColor, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: _statusColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 20),

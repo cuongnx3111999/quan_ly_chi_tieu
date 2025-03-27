@@ -8,7 +8,8 @@ class Budget {
   final String categoryId; // ID danh mục (null nếu áp dụng cho tất cả)
   final String userId; // ID người dùng
   final String name; // Tên ngân sách
-  final String period; // Kỳ ngân sách: 'daily', 'weekly', 'monthly', 'yearly', 'custom'
+  final String
+  period; // Kỳ ngân sách: 'daily', 'weekly', 'monthly', 'yearly', 'custom'
   final bool isRecurring; // Ngân sách lặp lại theo kỳ hay không
   final DateTime createdAt; // Thời gian tạo
 
@@ -23,16 +24,17 @@ class Budget {
     required this.period,
     this.isRecurring = false,
     DateTime? createdAt,
-  }) : this.createdAt = createdAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now();
 
   factory Budget.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
     return Budget(
       id: doc.id,
-      amount: (data['amount'] is int)
-          ? (data['amount'] as int).toDouble()
-          : data['amount'] ?? 0.0,
+      amount:
+          (data['amount'] is int)
+              ? (data['amount'] as int).toDouble()
+              : data['amount'] ?? 0.0,
       startDate: (data['startDate'] as Timestamp).toDate(),
       endDate: (data['endDate'] as Timestamp).toDate(),
       categoryId: data['categoryId'] ?? '',
@@ -68,16 +70,16 @@ class Budget {
     bool? isRecurring,
   }) {
     return Budget(
-      id: this.id,
+      id: id,
       amount: amount ?? this.amount,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       categoryId: categoryId ?? this.categoryId,
-      userId: this.userId,
+      userId: userId,
       name: name ?? this.name,
       period: period ?? this.period,
       isRecurring: isRecurring ?? this.isRecurring,
-      createdAt: this.createdAt,
+      createdAt: createdAt,
     );
   }
 
@@ -99,12 +101,13 @@ class Budget {
         newEndDate = newStartDate.add(Duration(days: 7));
         break;
       case 'monthly':
-      // Thêm một tháng vào ngày kết thúc
+        // Thêm một tháng vào ngày kết thúc
         newStartDate = DateTime(endDate.year, endDate.month + 1, 1);
         // Tính ngày cuối tháng
-        final nextMonth = endDate.month + 2 > 12
-            ? DateTime(endDate.year + 1, (endDate.month + 2) % 12, 1)
-            : DateTime(endDate.year, endDate.month + 2, 1);
+        final nextMonth =
+            endDate.month + 2 > 12
+                ? DateTime(endDate.year + 1, (endDate.month + 2) % 12, 1)
+                : DateTime(endDate.year, endDate.month + 2, 1);
         newEndDate = nextMonth.subtract(Duration(days: 1));
         break;
       case 'yearly':
@@ -118,14 +121,14 @@ class Budget {
     }
 
     return Budget(
-      amount: this.amount,
+      amount: amount,
       startDate: newStartDate,
       endDate: newEndDate,
-      categoryId: this.categoryId,
-      userId: this.userId,
-      name: this.name,
-      period: this.period,
-      isRecurring: this.isRecurring,
+      categoryId: categoryId,
+      userId: userId,
+      name: name,
+      period: period,
+      isRecurring: isRecurring,
     );
   }
 }

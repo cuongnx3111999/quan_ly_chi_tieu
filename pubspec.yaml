@@ -43,6 +43,11 @@ dependencies:
   fl_chart: ^0.61.0
   shared_preferences: ^2.0.17
 
+  firebase_analytics: ^10.10.7
+  google_sign_in: ^6.0.2
+  firebase_storage: ^11.0.10
+  path: ^1.8.2
+  uuid: ^3.0.7
 dev_dependencies:
   flutter_test:
     sdk: flutter

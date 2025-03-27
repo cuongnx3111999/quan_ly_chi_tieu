@@ -6,7 +6,8 @@ class Category {
   final String name; // Tên danh mục
   final int iconData; // Mã của biểu tượng (IconData.codePoint)
   final int colorValue; // Giá trị màu sắc
-  final String userId; // ID của người dùng tạo danh mục (null nếu là danh mục mặc định)
+  final String
+  userId; // ID của người dùng tạo danh mục (null nếu là danh mục mặc định)
   final bool isDefault; // Danh mục mặc định hay tùy chỉnh
   final String? parentId; // Danh mục cha (nếu là danh mục con)
   final bool isExpense; // Loại danh mục (chi tiêu hoặc thu nhập)
@@ -23,10 +24,7 @@ class Category {
   });
 
   // Chuyển đổi codePoint thành IconData
-  IconData get icon => IconData(
-    iconData,
-    fontFamily: 'MaterialIcons',
-  );
+  IconData get icon => IconData(iconData, fontFamily: 'MaterialIcons');
 
   // Chuyển đổi giá trị màu thành Color
   Color get color => Color(colorValue);
@@ -67,11 +65,11 @@ class Category {
     bool? isExpense,
   }) {
     return Category(
-      id: this.id,
+      id: id,
       name: name ?? this.name,
       iconData: iconData ?? this.iconData,
       colorValue: colorValue ?? this.colorValue,
-      userId: this.userId,
+      userId: userId,
       isDefault: isDefault ?? this.isDefault,
       parentId: parentId ?? this.parentId,
       isExpense: isExpense ?? this.isExpense,

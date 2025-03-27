@@ -10,7 +10,8 @@ class Expense {
   final String? imageUrl; // Đường dẫn ảnh hóa đơn (nếu có)
   final String? location; // Địa điểm chi tiêu (nếu có)
   final bool isRecurring; // Khoản chi định kỳ hay không
-  final String? recurringType; // Loại định kỳ (hàng ngày, hàng tuần, hàng tháng...)
+  final String?
+  recurringType; // Loại định kỳ (hàng ngày, hàng tuần, hàng tháng...)
   final DateTime createdAt; // Thời gian tạo bản ghi
 
   Expense({
@@ -25,16 +26,17 @@ class Expense {
     this.isRecurring = false,
     this.recurringType,
     DateTime? createdAt,
-  }) : this.createdAt = createdAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now();
 
   factory Expense.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
     return Expense(
       id: doc.id,
-      amount: (data['amount'] is int)
-          ? (data['amount'] as int).toDouble()
-          : data['amount'] ?? 0.0,
+      amount:
+          (data['amount'] is int)
+              ? (data['amount'] as int).toDouble()
+              : data['amount'] ?? 0.0,
       date: (data['date'] as Timestamp).toDate(),
       categoryId: data['categoryId'] ?? '',
       note: data['note'],
@@ -73,17 +75,17 @@ class Expense {
     String? recurringType,
   }) {
     return Expense(
-      id: this.id,
+      id: id,
       amount: amount ?? this.amount,
       date: date ?? this.date,
       categoryId: categoryId ?? this.categoryId,
       note: note ?? this.note,
-      userId: this.userId,
+      userId: userId,
       imageUrl: imageUrl ?? this.imageUrl,
       location: location ?? this.location,
       isRecurring: isRecurring ?? this.isRecurring,
       recurringType: recurringType ?? this.recurringType,
-      createdAt: this.createdAt,
+      createdAt: createdAt,
     );
   }
 }

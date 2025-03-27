@@ -54,11 +54,11 @@ class UserModel {
     Map<String, dynamic>? settings,
   }) {
     return UserModel(
-      id: this.id,
+      id: id,
       name: name ?? this.name,
-      email: this.email,
+      email: email,
       photoUrl: photoUrl ?? this.photoUrl,
-      createdAt: this.createdAt,
+      createdAt: createdAt,
       currency: currency ?? this.currency,
       settings: settings ?? this.settings,
     );
