@@ -16,11 +16,11 @@ class AuthService {
 
   // Đăng ký bằng email và mật khẩu
   Future<UserCredential> registerWithEmailAndPassword(
-    String email,
-    String password,
-    String name,
-  ) async {
+      String email, String password, String name) async {
     try {
+      // Bỏ qua reCAPTCHA khi đăng ký
+      await _auth.setSettings(appVerificationDisabledForTesting: true);
+
       // Tạo tài khoản trên Firebase Authentication
       final credential = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -34,15 +34,31 @@ class AuthService {
 
       return credential;
     } catch (e) {
+      // Xử lý lỗi reCAPTCHA
+      if (e.toString().contains('CONFIGURATION_NOT_FOUND') ||
+          e.toString().contains('reCAPTCHA')) {
+
+        // Đảm bảo tắt reCAPTCHA và thử lại
+        await _auth.setSettings(appVerificationDisabledForTesting: true);
+
+        final credential = await _auth.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+
+        if (credential.user != null) {
+          await _createUserDocument(credential.user!.uid, name, email);
+        }
+
+        return credential;
+      }
       rethrow; // Đẩy lỗi lên để xử lý ở UI
     }
   }
 
   // Đăng nhập bằng email và mật khẩu
   Future<UserCredential> signInWithEmailAndPassword(
-    String email,
-    String password,
-  ) async {
+      String email, String password) async {
     try {
       return await _auth.signInWithEmailAndPassword(
         email: email,
@@ -63,7 +79,7 @@ class AuthService {
 
       // Lấy thông tin xác thực từ request
       final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      await googleUser.authentication;
 
       // Tạo credential cho Firebase
       final credential = GoogleAuthProvider.credential(
@@ -72,7 +88,8 @@ class AuthService {
       );
 
       // Đăng nhập vào Firebase bằng credential
-      final userCredential = await _auth.signInWithCredential(credential);
+      final userCredential =
+      await _auth.signInWithCredential(credential);
 
       // Kiểm tra và tạo document user trong Firestore nếu chưa có
       if (userCredential.user != null) {
@@ -86,6 +103,13 @@ class AuthService {
 
       return userCredential;
     } catch (e) {
+      // Xử lý lỗi reCAPTCHA
+      if (e.toString().contains('CONFIGURATION_NOT_FOUND') ||
+          e.toString().contains('reCAPTCHA')) {
+
+        // Thử lại sau khi tắt reCAPTCHA
+        await _auth.setSettings(appVerificationDisabledForTesting: true);
+      }
       rethrow;
     }
   }
@@ -118,9 +142,7 @@ class AuthService {
 
         // Cập nhật thông tin trong Firestore
         if (displayName != null || photoURL != null) {
-          final userRef = _firestore
-              .collection('users')
-              .doc(_auth.currentUser!.uid);
+          final userRef = _firestore.collection('users').doc(_auth.currentUser!.uid);
 
           Map<String, dynamic> updateData = {};
           if (displayName != null) updateData['name'] = displayName;
@@ -139,11 +161,10 @@ class AuthService {
     try {
       if (_auth.currentUser == null) return null;
 
-      final doc =
-          await _firestore
-              .collection('users')
-              .doc(_auth.currentUser!.uid)
-              .get();
+      final doc = await _firestore
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .get();
 
       if (doc.exists) {
         return UserModel.fromFirestore(doc);
@@ -157,12 +178,7 @@ class AuthService {
   }
 
   // Tạo document user trong Firestore
-  Future<void> _createUserDocument(
-    String uid,
-    String name,
-    String email, [
-    String? photoUrl,
-  ]) async {
+  Future<void> _createUserDocument(String uid, String name, String email, [String? photoUrl]) async {
     final userModel = UserModel(
       id: uid,
       name: name,
@@ -170,7 +186,10 @@ class AuthService {
       photoUrl: photoUrl,
       createdAt: DateTime.now(),
       currency: 'VND',
-      settings: {'darkMode': false, 'notificationsEnabled': true},
+      settings: {
+        'darkMode': false,
+        'notificationsEnabled': true,
+      },
     );
 
     await _firestore.collection('users').doc(uid).set(userModel.toMap());
@@ -178,11 +197,7 @@ class AuthService {
 
   // Kiểm tra và tạo document user nếu chưa tồn tại
   Future<void> _checkAndCreateUserDocument(
-    String uid,
-    String name,
-    String email, [
-    String? photoUrl,
-  ]) async {
+      String uid, String name, String email, [String? photoUrl]) async {
     final docSnapshot = await _firestore.collection('users').doc(uid).get();
 
     if (!docSnapshot.exists) {

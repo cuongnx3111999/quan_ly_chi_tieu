@@ -56,9 +56,9 @@ class AnalyticsService {
 
   // Ghi lại bất kỳ sự kiện tùy chỉnh nào
   Future<void> logCustomEvent(
-    String name,
-    Map<String, dynamic> parameters,
-  ) async {
+      String name,
+      Map<String, Object>? parameters, // Thay đổi kiểu dữ liệu ở đây
+      ) async {
     await _analytics.logEvent(name: name, parameters: parameters);
   }
 }

@@ -41,48 +41,47 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA-3MbTBwk7beUiry44oT-1oJAi9ZLZVmU',
-    appId: '1:254603231116:web:4a3f8731159b980c9aa0a9',
-    messagingSenderId: '254603231116',
-    projectId: 'careful-engine-447006-v6',
-    authDomain: 'careful-engine-447006-v6.firebaseapp.com',
-    storageBucket: 'careful-engine-447006-v6.firebasestorage.app',
-    measurementId: 'G-XC493XBFC7',
+    apiKey: 'AIzaSyAOvVr5aH1YYXHoWxnpMx4DjenJcIPVNts',
+    appId: '1:90050268720:web:61edafc5b9e6d1f45427f5',
+    messagingSenderId: '90050268720',
+    projectId: 'qlct-cblack',
+    authDomain: 'qlct-cblack.firebaseapp.com',
+    storageBucket: 'qlct-cblack.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBl6yE3C25XCjn2cPUNSqoRsc0vFzy-I1o',
-    appId: '1:254603231116:android:fd8444e76cc1ac789aa0a9',
-    messagingSenderId: '254603231116',
-    projectId: 'careful-engine-447006-v6',
-    storageBucket: 'careful-engine-447006-v6.firebasestorage.app',
+    apiKey: 'AIzaSyAKXWxi1hhb9vUfCm-YTNRcyfP9h1DvUbA',
+    appId: '1:90050268720:android:ae173388da9e41c55427f5',
+    messagingSenderId: '90050268720',
+    projectId: 'qlct-cblack',
+    storageBucket: 'qlct-cblack.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBuHmBqdNyMNklKZb6pfqQmGxyhPcFBFd0',
-    appId: '1:254603231116:ios:849065f31edff1ba9aa0a9',
-    messagingSenderId: '254603231116',
-    projectId: 'careful-engine-447006-v6',
-    storageBucket: 'careful-engine-447006-v6.firebasestorage.app',
+    apiKey: 'AIzaSyBsAEDu_C8Pqf79ebvXlwBPmUdKqrQshug',
+    appId: '1:90050268720:ios:06e2bf72e1dcb1e05427f5',
+    messagingSenderId: '90050268720',
+    projectId: 'qlct-cblack',
+    storageBucket: 'qlct-cblack.firebasestorage.app',
     iosBundleId: 'com.example.quanLyChiTieu',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBuHmBqdNyMNklKZb6pfqQmGxyhPcFBFd0',
-    appId: '1:254603231116:ios:849065f31edff1ba9aa0a9',
-    messagingSenderId: '254603231116',
-    projectId: 'careful-engine-447006-v6',
-    storageBucket: 'careful-engine-447006-v6.firebasestorage.app',
+    apiKey: 'AIzaSyBsAEDu_C8Pqf79ebvXlwBPmUdKqrQshug',
+    appId: '1:90050268720:ios:06e2bf72e1dcb1e05427f5',
+    messagingSenderId: '90050268720',
+    projectId: 'qlct-cblack',
+    storageBucket: 'qlct-cblack.firebasestorage.app',
     iosBundleId: 'com.example.quanLyChiTieu',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyA-3MbTBwk7beUiry44oT-1oJAi9ZLZVmU',
-    appId: '1:254603231116:web:c739c90577c3aa659aa0a9',
-    messagingSenderId: '254603231116',
-    projectId: 'careful-engine-447006-v6',
-    authDomain: 'careful-engine-447006-v6.firebaseapp.com',
-    storageBucket: 'careful-engine-447006-v6.firebasestorage.app',
-    measurementId: 'G-4Y1FWGWWDN',
+    apiKey: 'AIzaSyAOvVr5aH1YYXHoWxnpMx4DjenJcIPVNts',
+    appId: '1:90050268720:web:984f6364ca4076215427f5',
+    messagingSenderId: '90050268720',
+    projectId: 'qlct-cblack',
+    authDomain: 'qlct-cblack.firebaseapp.com',
+    storageBucket: 'qlct-cblack.firebasestorage.app',
   );
+
 }
