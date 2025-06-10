@@ -1,0 +1,652 @@
+@startuml
+set namespaceSeparator ::
+
+class "money_grower::blocs::budget_bloc.dart::BudgetBloc" {
+  +Repository repository
+  +dynamic getBudgetsByUsername()
+  +dynamic insertBudget()
+  +dynamic deleteBudget()
+  +dynamic updateBudget()
+  +dynamic isBudgetNameExist()
+}
+
+"money_grower::blocs::budget_bloc.dart::BudgetBloc" o-- "money_grower::resources::repository.dart::Repository"
+
+class "money_grower::blocs::transaction_bloc.dart::TransactionBloc" {
+  +Repository repository
+  +dynamic getPriceOfTransactionTypeInTime()
+  +dynamic getTransactionSummaryOfMonth()
+  +dynamic getLoanDebtList()
+  +dynamic insertTransaction()
+  +dynamic updateTransaction()
+  +dynamic deleteTransaction()
+}
+
+"money_grower::blocs::transaction_bloc.dart::TransactionBloc" o-- "money_grower::resources::repository.dart::Repository"
+
+class "money_grower::blocs::user_bloc.dart::UserBloc" {
+  +Repository repository
+  +dynamic getUserByUsername()
+  +dynamic insertUser()
+  +dynamic updateUser()
+}
+
+"money_grower::blocs::user_bloc.dart::UserBloc" o-- "money_grower::resources::repository.dart::Repository"
+
+class "money_grower::firebase_options.dart::DefaultFirebaseOptions" {
+  {static} +FirebaseOptions android
+  {static} +FirebaseOptions currentPlatform
+}
+
+"money_grower::firebase_options.dart::DefaultFirebaseOptions" o-- "firebase_core_platform_interface::firebase_core_platform_interface.dart::FirebaseOptions"
+
+class "money_grower::helper::current_user.dart::CurrentUser" {
+  {static} +UserModel? user
+  {static} -FirebaseAuth _auth
+  {static} +String? username
+  {static} +String? id
+  {static} +User? currentUser
+  {static} +bool isLoggedIn
+  {static} +String? email
+  {static} +void setUser()
+  {static} +void clear()
+  {static} +dynamic signOut()
+}
+
+"money_grower::helper::current_user.dart::CurrentUser" o-- "money_grower::models::user_model.dart::UserModel"
+"money_grower::helper::current_user.dart::CurrentUser" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"money_grower::helper::current_user.dart::CurrentUser" o-- "firebase_auth::firebase_auth.dart::User"
+
+class "money_grower::helper::doc_helper.dart::DocHelper" {
+  +FirebaseFirestore db
+  +CollectionReference<Object?> ref
+}
+
+"money_grower::helper::doc_helper.dart::DocHelper" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"money_grower::helper::doc_helper.dart::DocHelper" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+
+class "money_grower::helper::format_helper.dart::FormatHelper" {
+  +String formatMoney()
+}
+
+class "money_grower::helper::icon_helper.dart::IconHelper" {
+  +IconData getIconByName()
+}
+
+class "money_grower::main.dart::MyApp" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::main.dart::MyApp"
+
+class "money_grower::main.dart::AuthWrapper" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::main.dart::AuthWrapper"
+
+class "money_grower::models::budget_model.dart::BudgetModel" {
+  +String? id
+  +String name
+  +DateTime beginDate
+  +DateTime endDate
+  +int totalBudget
+  +int totalUsed
+  +String username
+  +Map<String, dynamic> toJson()
+  {static} -DateTime _toDateTime()
+}
+
+class "money_grower::models::transaction_model.dart::TransactionModel" {
+  +String? id
+  +String name
+  +String note
+  +DateTime date
+  +int price
+  +String username
+  +Map<String, dynamic> toJson()
+  {static} -DateTime _toDateTime()
+}
+
+class "money_grower::models::transaction_model.dart::DebtTransactionModel" {
+  +bool done
+  +Map<String, dynamic> toJson()
+}
+
+"money_grower::models::transaction_model.dart::TransactionModel" <|-- "money_grower::models::transaction_model.dart::DebtTransactionModel"
+
+class "money_grower::models::user_model.dart::UserModel" {
+  +String? id
+  +String? username
+  +int? income
+  +String? email
+  +Map<String, dynamic> toJson()
+}
+
+class "money_grower::resources::budget_provider.dart::BudgetProvider" {
+  +CollectionReference<Object?> ref
+  +dynamic getBudgetsByUsername()
+  +dynamic insertBudget()
+  +dynamic deleteBudget()
+  +dynamic updateBudget()
+  +dynamic getBudgetByName()
+  +dynamic getMatchBudgetByTransaction()
+}
+
+"money_grower::resources::budget_provider.dart::BudgetProvider" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+
+class "money_grower::resources::repository.dart::Repository" {
+  +UserProvider userProvider
+  +TransactionProvider transactionProvider
+  +BudgetProvider budgetProvider
+  +dynamic getUserByUsername()
+  +dynamic insertUser()
+  +dynamic updateUser()
+  +dynamic getTransactionById()
+  +dynamic getTransactionSummaryOfMonth()
+  +dynamic getPriceOfTransactionTypeInTime()
+  +dynamic getLoanDebtList()
+  +dynamic insertTransaction()
+  +dynamic deleteTransaction()
+  +dynamic updateTransaction()
+  +dynamic getBudgetsByUsername()
+  +dynamic insertBudget()
+  +dynamic deleteBudget()
+  +dynamic updateBudget()
+  +dynamic getMatchBudgetByTransaction()
+}
+
+"money_grower::resources::repository.dart::Repository" o-- "money_grower::resources::user_provider.dart::UserProvider"
+"money_grower::resources::repository.dart::Repository" o-- "money_grower::resources::transaction_provider.dart::TransactionProvider"
+"money_grower::resources::repository.dart::Repository" o-- "money_grower::resources::budget_provider.dart::BudgetProvider"
+
+class "money_grower::resources::transaction_provider.dart::TransactionProvider" {
+  +DocHelper doc
+  +dynamic getTransactionSummaryOfMonth()
+  +dynamic getPriceOfTransactionTypeInTime()
+  +dynamic getLoanDebtList()
+  +dynamic insertTransaction()
+  +dynamic deleteTransaction()
+  +dynamic updateTransaction()
+  +dynamic getTransactionById()
+}
+
+"money_grower::resources::transaction_provider.dart::TransactionProvider" o-- "money_grower::helper::doc_helper.dart::DocHelper"
+
+class "money_grower::resources::user_provider.dart::UserProvider" {
+  +CollectionReference<Object?> doc
+  +dynamic getUserByUsername()
+  +dynamic updateUser()
+  +dynamic insertUser()
+}
+
+"money_grower::resources::user_provider.dart::UserProvider" o-- "cloud_firestore::cloud_firestore.dart::CollectionReference<Object>"
+
+class "money_grower::ui::budget_screen::budget_add_popup.dart::BudgetAddPopup" {
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::budget_screen::budget_add_popup.dart::BudgetAddPopup"
+
+class "money_grower::ui::budget_screen::budget_add_popup.dart::BudgetAddPopupState" {
+  +TextEditingController priceTextController
+  +TextEditingController beginTextController
+  +TextEditingController endTextController
+  +TextEditingController nameTextController
+  -bool _saving
+  -DateFormat _dateFormat
+  +void initState()
+  +void dispose()
+  +void saveSubmit()
+  +void stopSaving()
+  +void setPrice()
+  +void setName()
+  -void _showErrorDialog()
+  +dynamic submitBudget()
+  -dynamic _selectDate()
+  +Widget build()
+}
+
+"money_grower::ui::budget_screen::budget_add_popup.dart::BudgetAddPopupState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"money_grower::ui::budget_screen::budget_add_popup.dart::BudgetAddPopupState" o-- "intl::src::intl::date_format.dart::DateFormat"
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::budget_screen::budget_add_popup.dart::BudgetAddPopupState"
+
+class "money_grower::ui::budget_screen::budget_edit_popup.dart::BudgetEditPopup" {
+  +BudgetModel budget
+  +State<StatefulWidget> createState()
+}
+
+"money_grower::ui::budget_screen::budget_edit_popup.dart::BudgetEditPopup" o-- "money_grower::models::budget_model.dart::BudgetModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::budget_screen::budget_edit_popup.dart::BudgetEditPopup"
+
+class "money_grower::ui::budget_screen::budget_edit_popup.dart::BudgetEditPopupState" {
+  -bool _saving
+  +TextEditingController priceTextController
+  +TextEditingController beginTextController
+  +TextEditingController endTextController
+  +TextEditingController nameTextController
+  +void initState()
+  +void dispose()
+  +void saveSubmit()
+  +void stopSaving()
+  +void setPrice()
+  +void setName()
+  +dynamic submitBudget()
+  -dynamic _showErrorDialog()
+  -dynamic _selectDate()
+  +Widget build()
+}
+
+"money_grower::ui::budget_screen::budget_edit_popup.dart::BudgetEditPopupState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::budget_screen::budget_edit_popup.dart::BudgetEditPopupState"
+
+class "money_grower::ui::budget_screen::budget_screen.dart::BudgetScreen" {
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::budget_screen::budget_screen.dart::BudgetScreen"
+
+class "money_grower::ui::budget_screen::budget_screen.dart::BudgetScreenState" {
+  -dynamic _budgetFuture
+  +void initState()
+  +dynamic loadBudgets()
+  -void _reloadBudgets()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::budget_screen::budget_screen.dart::BudgetScreenState"
+
+class "money_grower::ui::budget_screen::budget_screen.dart::BudgetBoard" {
+  +List<dynamic> budgetList
+  +void Function() reloadBudgets
+  +Widget build()
+}
+
+"money_grower::ui::budget_screen::budget_screen.dart::BudgetBoard" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::budget_screen::budget_screen.dart::BudgetBoard"
+
+class "money_grower::ui::custom_control::budget_card.dart::BudgetCard" {
+  +dynamic budget
+  +dynamic reloadBudgets
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::custom_control::budget_card.dart::BudgetCard"
+
+class "money_grower::ui::custom_control::budget_card.dart::BudgetCardState" {
+  +DateFormat dateFormatter
+  +FormatHelper moneyFormatter
+  +dynamic deleteBudget()
+  +Widget build()
+}
+
+"money_grower::ui::custom_control::budget_card.dart::BudgetCardState" o-- "intl::src::intl::date_format.dart::DateFormat"
+"money_grower::ui::custom_control::budget_card.dart::BudgetCardState" o-- "money_grower::helper::format_helper.dart::FormatHelper"
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::custom_control::budget_card.dart::BudgetCardState"
+
+class "money_grower::ui::custom_control::category_page.dart::CategoryPage" {
+  +dynamic categoryList
+  +dynamic setName
+  +dynamic title
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::custom_control::category_page.dart::CategoryPage"
+
+class "money_grower::ui::custom_control::faded_transition.dart::FadeRoute" {
+  +Widget page
+}
+
+"money_grower::ui::custom_control::faded_transition.dart::FadeRoute" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::pages.dart::PageRouteBuilder" <|-- "money_grower::ui::custom_control::faded_transition.dart::FadeRoute"
+
+class "money_grower::ui::custom_control::month_strip.dart::MonthStrip" {
+  +String format
+  +DateTime from
+  +DateTime to
+  +DateTime initialMonth
+  +void Function(DateTime) onMonthChanged
+  +double height
+  +double viewportFraction
+  +TextStyle selectedTextStyle
+  +TextStyle normalTextStyle
+  +ScrollPhysics? physics
+  +_MonthStripState createState()
+}
+
+"money_grower::ui::custom_control::month_strip.dart::MonthStrip" o-- "flutter::src::foundation::basic_types.dart::void Function(DateTime)"
+"money_grower::ui::custom_control::month_strip.dart::MonthStrip" o-- "flutter::src::painting::text_style.dart::TextStyle"
+"money_grower::ui::custom_control::month_strip.dart::MonthStrip" o-- "flutter::src::widgets::scroll_physics.dart::ScrollPhysics"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::custom_control::month_strip.dart::MonthStrip"
+
+class "money_grower::ui::custom_control::month_strip.dart::_MonthStripState" {
+  +List<_MonthItem> months
+  +DateFormat dateFormat
+  +PageController controller
+  -int _lastReportedPage
+  +void initState()
+  +Widget build()
+  -Widget _buildContent()
+}
+
+"money_grower::ui::custom_control::month_strip.dart::_MonthStripState" o-- "intl::src::intl::date_format.dart::DateFormat"
+"money_grower::ui::custom_control::month_strip.dart::_MonthStripState" o-- "flutter::src::widgets::page_view.dart::PageController"
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::custom_control::month_strip.dart::_MonthStripState"
+
+class "money_grower::ui::custom_control::month_strip.dart::_MonthItem" {
+  +DateTime time
+  +bool selected
+}
+
+class "money_grower::ui::custom_control::month_striper.dart::MonthStriper" {
+  +DateTime date
+  +bool isDisable
+  +void Function(DateTime)? callback
+  +Widget build()
+}
+
+"money_grower::ui::custom_control::month_striper.dart::MonthStriper" o-- "flutter::src::foundation::basic_types.dart::void Function(DateTime)"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::custom_control::month_striper.dart::MonthStriper"
+
+class "money_grower::ui::custom_control::transaction_date_card.dart::TransactionDateCard" {
+  +DateTime date
+  +int price
+  +bool isBoldPrice
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::custom_control::transaction_date_card.dart::TransactionDateCard"
+
+class "money_grower::ui::custom_control::transaction_detail_card.dart::TransactionDetailCard" {
+  +TransactionModel transaction
+  +bool isBoldPrice
+  +Widget build()
+}
+
+"money_grower::ui::custom_control::transaction_detail_card.dart::TransactionDetailCard" o-- "money_grower::models::transaction_model.dart::TransactionModel"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::custom_control::transaction_detail_card.dart::TransactionDetailCard"
+
+class "money_grower::ui::custom_control::transaction_loan_card.dart::TransactionLoanCard" {
+  +TransactionModel transaction
+  +bool isBoldPrice
+  +dynamic username
+  +Widget build()
+}
+
+"money_grower::ui::custom_control::transaction_loan_card.dart::TransactionLoanCard" o-- "money_grower::models::transaction_model.dart::TransactionModel"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::custom_control::transaction_loan_card.dart::TransactionLoanCard"
+
+class "money_grower::ui::debt_screen::debt_board.dart::DebtBoard" {
+  +dynamic debtList
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::debt_screen::debt_board.dart::DebtBoard"
+
+class "money_grower::ui::debt_screen::debt_edit_popup.dart::DebtEditPopup" {
+  +TransactionModel transaction
+  +String username
+  +State<DebtEditPopup> createState()
+}
+
+"money_grower::ui::debt_screen::debt_edit_popup.dart::DebtEditPopup" o-- "money_grower::models::transaction_model.dart::TransactionModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::debt_screen::debt_edit_popup.dart::DebtEditPopup"
+
+class "money_grower::ui::debt_screen::debt_edit_popup.dart::DebtEditPopupState" {
+  -bool _saving
+  +void saveSubmit()
+  +void deleteLoan()
+  +void payLoan()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::debt_screen::debt_edit_popup.dart::DebtEditPopupState"
+
+class "money_grower::ui::debt_screen::debt_screen.dart::DebtScreen" {
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::debt_screen::debt_screen.dart::DebtScreen"
+
+class "money_grower::ui::debt_screen::debt_screen.dart::DebtScreenState" {
+  +List<dynamic> loanList
+  +List<dynamic> debtList
+  +num totalLoanPrice
+  +num totalDebtPrice
+  {static} +int curTabIndex
+  -dynamic _futureLoad
+  +void initState()
+  +dynamic loadDebtAndLoanList()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::debt_screen::debt_screen.dart::DebtScreenState"
+
+class "money_grower::ui::debt_screen::loan_board.dart::LoanBoard" {
+  +dynamic loanList
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::debt_screen::loan_board.dart::LoanBoard"
+
+class "money_grower::ui::login_screen::welcome_screen.dart::WelcomeScreen" {
+  -UserBloc _userBloc
+  -FirebaseAuth _auth
+  -dynamic _authUser()
+  -dynamic _signupUser()
+  -dynamic _recoverPassword()
+  -String _getFirebaseAuthErrorMessage()
+  +Widget build()
+}
+
+"money_grower::ui::login_screen::welcome_screen.dart::WelcomeScreen" o-- "money_grower::blocs::user_bloc.dart::UserBloc"
+"money_grower::ui::login_screen::welcome_screen.dart::WelcomeScreen" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::login_screen::welcome_screen.dart::WelcomeScreen"
+
+class "money_grower::ui::main_screen::main_screen.dart::MoneyGrowerApp" {
+  +_MoneyGrowerAppState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::main_screen::main_screen.dart::MoneyGrowerApp"
+
+class "money_grower::ui::main_screen::main_screen.dart::_MoneyGrowerAppState" {
+  -dynamic _initializationFuture
+  +void initState()
+  -dynamic _initializeApp()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::main_screen::main_screen.dart::_MoneyGrowerAppState"
+
+class "money_grower::ui::main_screen::main_screen.dart::LoadingScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::main_screen::main_screen.dart::LoadingScreen"
+
+class "money_grower::ui::main_screen::main_screen.dart::ErrorScreen" {
+  +void Function() onRetry
+  +Widget build()
+}
+
+"money_grower::ui::main_screen::main_screen.dart::ErrorScreen" o-- "dart::ui::void Function()"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::main_screen::main_screen.dart::ErrorScreen"
+
+class "money_grower::ui::main_screen::main_screen.dart::MainScreen" {
+  +State<MainScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::main_screen::main_screen.dart::MainScreen"
+
+class "money_grower::ui::main_screen::main_screen.dart::_MainScreenState" {
+  -int _currentScreenIndex
+  -List<String> _menuOptions
+  -List<Widget> _screens
+  +Widget build()
+  -void _handleMenuSelection()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::main_screen::main_screen.dart::_MainScreenState"
+
+class "money_grower::ui::statistics_screen::statistics_board.dart::StatisticsBoard" {
+  +List<TransactionModel> list
+  +List<List<TransactionDate>> datesOfList
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::statistics_screen::statistics_board.dart::StatisticsBoard"
+
+class "money_grower::ui::statistics_screen::statistics_board.dart::TransactionDate" {
+  +DateTime date
+  +int price
+}
+
+class "money_grower::ui::statistics_screen::statistics_chart.dart::DonutPieChart" {
+  +List<dynamic> transactionList
+  +FormatHelper formatter
+  +RandomColor randomColor
+  +Widget build()
+  -Color _generateColor()
+}
+
+"money_grower::ui::statistics_screen::statistics_chart.dart::DonutPieChart" o-- "money_grower::helper::format_helper.dart::FormatHelper"
+"money_grower::ui::statistics_screen::statistics_chart.dart::DonutPieChart" o-- "random_color::random_color.dart::RandomColor"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::statistics_screen::statistics_chart.dart::DonutPieChart"
+
+class "money_grower::ui::statistics_screen::statistics_screen.dart::StatisticsScreen" {
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::statistics_screen::statistics_screen.dart::StatisticsScreen"
+
+class "money_grower::ui::statistics_screen::statistics_screen.dart::StatisticsScreenState" {
+  +TransactionBloc transactionBloc
+  +String? username
+  +TransactionSummary summary
+  +List<TransactionModel> incomeList
+  +List<TransactionModel> expenseList
+  +dynamic loadSummaryTransaction()
+  +void reloadSummary()
+  +Widget build()
+}
+
+"money_grower::ui::statistics_screen::statistics_screen.dart::StatisticsScreenState" o-- "money_grower::blocs::transaction_bloc.dart::TransactionBloc"
+"money_grower::ui::statistics_screen::statistics_screen.dart::StatisticsScreenState" o-- "money_grower::ui::transaction_screen::transaction_summary.dart::TransactionSummary"
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::statistics_screen::statistics_screen.dart::StatisticsScreenState"
+
+class "money_grower::ui::transaction_screen::transaction_add_popup.dart::TransactionAddPopup" {
+  +State<StatefulWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::transaction_screen::transaction_add_popup.dart::TransactionAddPopup"
+
+class "money_grower::ui::transaction_screen::transaction_add_popup.dart::TransactionAddPopupState" {
+  +TextEditingController priceTextController
+  +TextEditingController dateTextController
+  +TextEditingController nameTextController
+  +TextEditingController noteTextController
+  -bool _saving
+  +void initState()
+  +void setPrice()
+  +void setName()
+  +void submitTransaction()
+  +Widget build()
+}
+
+"money_grower::ui::transaction_screen::transaction_add_popup.dart::TransactionAddPopupState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::transaction_screen::transaction_add_popup.dart::TransactionAddPopupState"
+
+class "money_grower::ui::transaction_screen::transaction_category_page.dart::TransactionCategoryPage" {
+  +List<String> incomeList
+  +List<String> deptList
+  +List<String> expenseList
+  +Function setName
+  +Widget TransactionCategoryList()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::transaction_screen::transaction_category_page.dart::TransactionCategoryPage"
+
+class "money_grower::ui::transaction_screen::transaction_detail_board.dart::TransactionDetailBoard" {
+  +List<dynamic> dateList
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::transaction_screen::transaction_detail_board.dart::TransactionDetailBoard"
+
+class "money_grower::ui::transaction_screen::transaction_detail_pane.dart::TransactionDetailPane" {
+  +DateTime date
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::transaction_screen::transaction_detail_pane.dart::TransactionDetailPane"
+
+class "money_grower::ui::transaction_screen::transaction_edit_popup.dart::TransactionEditPopup" {
+  +TransactionModel transaction
+  +State<StatefulWidget> createState()
+}
+
+"money_grower::ui::transaction_screen::transaction_edit_popup.dart::TransactionEditPopup" o-- "money_grower::models::transaction_model.dart::TransactionModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::transaction_screen::transaction_edit_popup.dart::TransactionEditPopup"
+
+class "money_grower::ui::transaction_screen::transaction_edit_popup.dart::TransactionEditPopupState" {
+  +TextEditingController priceTextController
+  +TextEditingController dateTextController
+  +TextEditingController nameTextController
+  +TextEditingController noteTextController
+  -bool _saving
+  +void initState()
+  +void setPrice()
+  +void setName()
+  +void setLoading()
+  +dynamic deleteTransaction()
+  +dynamic updateTransaction()
+  +Widget build()
+}
+
+"money_grower::ui::transaction_screen::transaction_edit_popup.dart::TransactionEditPopupState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::transaction_screen::transaction_edit_popup.dart::TransactionEditPopupState"
+
+class "money_grower::ui::transaction_screen::transaction_screen.dart::TransactionScreen" {
+  +State<TransactionScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "money_grower::ui::transaction_screen::transaction_screen.dart::TransactionScreen"
+
+class "money_grower::ui::transaction_screen::transaction_screen.dart::TransactionScreenState" {
+  +TransactionSummary summary
+  +TransactionBloc transactionBloc
+  +String? username
+  +dynamic loadSummaryTransaction()
+  +void reloadSummary()
+  +Widget build()
+}
+
+"money_grower::ui::transaction_screen::transaction_screen.dart::TransactionScreenState" o-- "money_grower::ui::transaction_screen::transaction_summary.dart::TransactionSummary"
+"money_grower::ui::transaction_screen::transaction_screen.dart::TransactionScreenState" o-- "money_grower::blocs::transaction_bloc.dart::TransactionBloc"
+"flutter::src::widgets::framework.dart::State" <|-- "money_grower::ui::transaction_screen::transaction_screen.dart::TransactionScreenState"
+
+class "money_grower::ui::transaction_screen::transaction_summary.dart::TransactionSummary" {
+  +int totalIncome
+  +int totalExpense
+  +int totalTransaction
+  +List<dynamic> transactionList
+  +DateTime date
+  {static} -TransactionSummary _instance
+  +void fromMap()
+}
+
+"money_grower::ui::transaction_screen::transaction_summary.dart::TransactionSummary" o-- "money_grower::ui::transaction_screen::transaction_summary.dart::TransactionSummary"
+
+class "money_grower::ui::transaction_screen::transacton_summary_board.dart::TransactionSummaryBoard" {
+  +FormatHelper formatter
+  +TransactionSummary summary
+  +Widget build()
+}
+
+"money_grower::ui::transaction_screen::transacton_summary_board.dart::TransactionSummaryBoard" o-- "money_grower::helper::format_helper.dart::FormatHelper"
+"money_grower::ui::transaction_screen::transacton_summary_board.dart::TransactionSummaryBoard" o-- "money_grower::ui::transaction_screen::transaction_summary.dart::TransactionSummary"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "money_grower::ui::transaction_screen::transacton_summary_board.dart::TransactionSummaryBoard"
+
+
+@enduml

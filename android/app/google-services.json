@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "873679159231",
+    "project_id": "moneygrower-4b33c",
+    "storage_bucket": "moneygrower-4b33c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:873679159231:android:5572e9812602e81a2eeb0a",
+        "android_client_info": {
+          "package_name": "com.example.money_grower"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2xT2KCkcdjbWJ7WSL-pue3yWfVaQA1Dw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
